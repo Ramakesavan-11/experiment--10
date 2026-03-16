@@ -1,0 +1,885 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width,initial-scale=1.0"> 
+<title>SwiftHaul – Transport & Shipping</title> 
+<link 
+href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;
+500&display=swap" rel="stylesheet"> 
+<style> 
+:root{--bg:#0a0e1a;--s1:#111827;--s2:#1a2235;--ac:#f97316;--bl:#3b82f6;--gr:#22c55e;--rd:#ef4444;--tx:#f1f5f9;--mu:#94a3b8;--br:rgba(255,255,255,0.08);--fh:'Syne',sans-serif;--fb:'DM Sans',sans
+serif} 
+*{margin:0;padding:0;box-sizing:border-box} 
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:15px;line-height:1.6;min
+height:100vh} 
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(10,14,26,.93);backdrop
+filter:blur(14px);border-bottom:1px solid var(--br);padding:0 2rem;height:60px;display:flex;align
+items:center;justify-content:space-between} 
+.logo{font-family:var(--fh);font-size:21px;font-weight:800;cursor:pointer}.logo span{color:var(--ac)} 
+.nav-links{display:flex;gap:1.8rem}.nav-links a{color:var(--mu);font-size:13px;font
+weight:500;cursor:pointer;transition:color .2s}.nav-links a:hover,.nav-links a.active{color:var(--tx)} 
+.nav-r{display:flex;gap:8px;align-items:center} 
+.btn{padding:7px 18px;border-radius:8px;font-family:var(--fb);font-size:13px;font
+weight:500;cursor:pointer;transition:all .2s;border:none} 
+.btn-o{background:transparent;border:1px solid var(--br);color:var(--tx)}.btn-o:hover{border
+color:var(--ac);color:var(--ac)} 
+.btn-p{background:var(--ac);color:#fff}.btn-p:hover{background:#fb923c;transform:translateY(
+1px)} 
+.page{display:none;min-height:100vh;padding-top:60px}.page.active{display:block} 
+.hero{min-height:calc(100vh - 60px);display:flex;align-items:center;padding:3rem 
+2rem;position:relative;overflow:hidden} 
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 55% 
+40%,rgba(249,115,22,.1) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 15% 
+80%,rgba(59,130,246,.07) 0%,transparent 60%);pointer-events:none} 
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(var(--br) 1px,transparent 
+1px),linear-gradient(90deg,var(--br) 1px,transparent 1px);background-size:55px 55px;pointer
+events:none} 
+.htag{display:inline-flex;align-items:center;gap:7px;background:rgba(249,115,22,.1);border:1px solid 
+rgba(249,115,22,.3);padding:5px 13px;border-radius:100px;font-size:11px;color:var(--ac);font
+weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.2rem} 
+.htag::before{content:'';width:6px;height:6px;background:var(--ac);border
+radius:50%;animation:pulse 2s infinite} 
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}} 
+h1{font-family:var(--fh);font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;line
+height:1.1;margin-bottom:1rem} 
+h1 em{font-style:normal;color:var(--ac)} 
+.hero p{color:var(--mu);font-size:16px;margin-bottom:1.8rem;max-width:480px} 
+.hctas{display:flex;gap:10px;flex-wrap:wrap} 
+.hstats{display:flex;gap:2.5rem;margin-top:2.5rem} 
+.snum{font-family:var(--fh);font-size:1.9rem;font-weight:800}.slbl{font-size:12px;color:var(--mu)} 
+.sec{padding:4rem 2rem;max-width:1160px;margin:0 auto} 
+.stitle{font-family:var(--fh);font-size:2rem;font-weight:700;margin-bottom:.6rem} 
+.ssub{color:var(--mu);font-size:15px;margin-bottom:2.5rem;max-width:480px} 
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.2rem} 
+.card{background:var(--s1);border:1px solid var(--br);border
+radius:14px;padding:1.5rem;transition:all .3s} 
+.card:hover{border-color:var(--ac);transform:translateY(-3px);background:var(--s2)} 
+.cicon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify
+content:center;font-size:20px;margin-bottom:.9rem} 
+.card h3{font-family:var(--fh);font-size:1rem;font-weight:700;margin-bottom:.4rem} 
+.card p{color:var(--mu);font-size:13px} 
+.cprice{margin-top:.8rem;font-size:1.3rem;font-weight:700;font-family:var(--fh);color:var(--ac)} 
+.cprice small{font-size:11px;color:var(--mu);font-family:var(--fb);font-weight:400} 
+.fbox{background:var(--s1);border:1px solid var(--br);border-radius:14px;padding:1.75rem;margin
+bottom:1.5rem} 
+.fg{margin-bottom:1.1rem}label{font-size:12px;color:var(--mu);display:block;margin
+bottom:5px;font-weight:500} 
+input,select,textarea{background:var(--s2);border:1px solid var(--br);color:var(--tx);padding:9px 
+13px;border-radius:9px;font-family:var(--fb);font
+size:14px;width:100%;outline:none;transition:border-color .2s} 
+input:focus,select:focus,textarea:focus{border-color:var(--ac)} 
+select option{background:var(--s1)} 
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px} 
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600} 
+.bg{background:rgba(34,197,94,.15);color:var(--gr)}.bo{background:rgba(249,115,22,.15);color:var(--ac)}.bb{background:rgba(59,130,246,.15);color:var(--bl)} 
+.mapbox{background:var(--s2);border
+radius:11px;height:300px;position:relative;overflow:hidden;border:1px solid var(--br);margin
+top:1.2rem} 
+.mgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.04) 
+1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background
+size:38px 38px} 
+.road-h{position:absolute;background:rgba(255,255,255,.06);height:12px;left:0;right:0;border
+radius:3px} 
+.road-v{position:absolute;background:rgba(255,255,255,.06);width:10px;top:0;bottom:0;border
+radius:3px} 
+.tdot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--ac);border:3px 
+solid #fff;animation:rip 1.5s infinite;transition:left .8s ease,top .8s ease;z-index:5} 
+@keyframes rip{0%{box-shadow:0 0 0 0 rgba(249,115,22,.5)}100%{box-shadow:0 0 0 14px 
+rgba(249,115,22,0)}} 
+.ddot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--gr);border:3px 
+solid #fff;z-index:5} 
+.mlbl{position:absolute;background:rgba(10,14,26,.9);border:1px solid var(--br);padding:3px 
+9px;border-radius:5px;font-size:10px;z-index:6;white-space:nowrap} 
+.tinfo{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin
+top:1.2rem} 
+.tstat{background:var(--s2);border-radius:9px;padding:.9rem;border:1px solid var(--br)} 
+.tsv{font-family:var(--fh);font-size:1.2rem;font-weight:700}.tsl{font-size:11px;color:var(-
+mu);margin-top:2px} 
+.rtbl{width:100%;border-collapse:collapse} 
+.rtbl th{text-align:left;padding:11px 14px;font-size:12px;color:var(--mu);border-bottom:1px solid 
+var(--br);font-weight:500} 
+.rtbl td{padding:12px 14px;border-bottom:1px solid var(--br);font-size:13px} 
+.rtbl tr:hover td{background:var(--s2)} 
+.awrap{min-height:calc(100vh - 60px);display:flex;align-items:center;justify
+content:center;padding:2rem} 
+.acard{background:var(--s1);border:1px solid var(--br);border
+radius:18px;padding:2.2rem;width:100%;max-width:400px} 
+.acard h2{font-family:var(--fh);font-size:1.7rem;font-weight:700;margin-bottom:.4rem} 
+.acard .sub{color:var(--mu);margin-bottom:1.8rem;font-size:13px} 
+.divider{display:flex;align-items:center;gap:10px;margin:1rem 0} 
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--br)} 
+.divider span{font-size:11px;color:var(--mu)} 
+.aswitch{text-align:center;margin-top:1.2rem;font-size:13px;color:var(--mu)} 
+.aswitch a{color:var(--ac);cursor:pointer} 
+.errmsg{background:rgba(239,68,68,.1);border:1px solid 
+rgba(239,68,68,.3);color:#f87171;padding:9px 13px;border-radius:7px;font-size:13px;margin
+bottom:.9rem;display:none} 
+.sucmsg{background:rgba(34,197,94,.1);border:1px solid 
+rgba(34,197,94,.3);color:#4ade80;padding:9px 13px;border-radius:7px;font-size:13px;margin
+bottom:.9rem;display:none} 
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1rem;margin
+bottom:1.8rem} 
+.dc{background:var(--s1);border:1px solid var(--br);border-radius:12px;padding:1.1rem} 
+.dc h4{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin
+bottom:6px} 
+.dc .big{font-family:var(--fh);font-size:1.9rem;font-weight:800} 
+.slist{background:var(--s1);border:1px solid var(--br);border-radius:12px;overflow:hidden} 
+.srow{display:grid;grid-template-columns:110px 1fr 1fr 90px 90px;gap:.8rem;padding:12px 
+1.1rem;border-bottom:1px solid var(--br);align-items:center;font-size:13px} 
+.srow:last-child{border-bottom:none} 
+.srow.hdr{background:var(--s2);font-size:11px;color:var(--mu);font-weight:600;text
+transform:uppercase;letter-spacing:.04em} 
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem} 
+.tcard{background:var(--s1);border:1px solid var(--br);border-radius:14px;padding:1.4rem;text
+align:center} 
+.tav{width:66px;height:66px;border-radius:50%;margin:0 auto .9rem;display:flex;align
+items:center;justify-content:center;font-size:26px} 
+.tcard h4{font-family:var(--fh);font-weight:700;margin-bottom:3px}.tcard p{color:var(--mu);font
+size:13px} 
+.timeline{position:relative;padding-left:1.8rem} 
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--br)} 
+.ti{position:relative;margin-bottom:1.8rem} 
+.ti::before{content:'';position:absolute;left:-2.4rem;top:4px;width:11px;height:11px;border
+radius:50%;background:var(--ac);border:2px solid var(--bg)} 
+.tiy{font-size:11px;color:var(--ac);font-weight:600;margin-bottom:3px} 
+.ti h4{font-family:var(--fh);font-weight:700;margin-bottom:3px}.ti p{color:var(--mu);font-size:13px} 
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem} 
+.citem{display:flex;gap:.9rem;margin-bottom:1.3rem;align-items:flex-start} 
+.cion{width:42px;height:42px;border-radius:9px;background:rgba(249,115,22,.1);border:1px solid 
+rgba(249,115,22,.2);display:flex;align-items:center;justify-content:center;font-size:17px;flex
+shrink:0} 
+.citem h4{font-weight:600;margin-bottom:3px;font-size:14px}.citem p{color:var(--mu);font
+size:13px} 
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;align
+items:center;justify-content:center} 
+.modal.open{display:flex} 
+.mbox{background:var(--s1);border:1px solid var(--br);border
+radius:18px;padding:1.8rem;width:90%;max-width:460px;max-height:90vh;overflow-y:auto} 
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--s1);border:1px solid var(-
+br);border-radius:11px;padding:.9rem 1.1rem;z-index:9999;font-size:13px;max-width:300px;box
+shadow:0 8px 28px rgba(0,0,0,.4);transform:translateY(80px);opacity:0;transition:all .3s} 
+.toast.show{transform:translateY(0);opacity:1} 
+footer{background:var(--s1);border-top:1px solid var(--br);padding:2.5rem 2rem} 
+.fgrid{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 
+1fr;gap:1.8rem} 
+.fb p{color:var(--mu);font-size:13px;margin-top:.6rem;max-width:260px} 
+.fc h5{font-family:var(--fh);font-weight:700;margin-bottom:.9rem;font-size:13px} 
+.fc a{display:block;color:var(--mu);text-decoration:none;font-size:13px;margin
+bottom:7px;cursor:pointer} 
+.fc a:hover{color:var(--ac)} 
+.fbot{max-width:1160px;margin:1.5rem auto 0;padding-top:1.2rem;border-top:1px solid var(-
+br);display:flex;justify-content:space-between;font-size:12px;color:var(--mu);flex
+wrap:wrap;gap:.5rem} 
+@media(max-width:768px){.nav-links{display:none}.cgrid,.row2{grid-template
+columns:1fr}.fgrid{grid-template-columns:1fr 1fr}.srow{grid-template-columns:1fr 1fr}} 
+</style> 
+</head> 
+<body> 
+<nav> 
+<div class="logo" onclick="go('home')">Swift<span>Haul</span></div> 
+<div class="nav-links"> 
+<a onclick="go('home')" id="n-home" class="active">Home</a> 
+<a onclick="go('track')" id="n-track">Track</a> 
+<a onclick="go('rates')" id="n-rates">Rates</a> 
+<a onclick="go('about')" id="n-about">About</a> 
+<a onclick="go('contact')" id="n-contact">Contact</a> 
+<a onclick="go('dash')" id="n-dash" style="display:none">Dashboard</a> 
+</div> 
+<div class="nav-r" id="nav-auth"> 
+<button class="btn btn-o" style="padding:6px 14px;font-size:12px" onclick="go('login')">Log 
+In</button> 
+<button class="btn btn-p" style="padding:6px 14px;font-size:12px" onclick="go('signup')">Sign 
+Up</button> 
+</div> 
+<div class="nav-r" id="nav-user" style="display:none"> 
+<span id="uname" style="font-size:13px;color:var(--mu)"></span> 
+<button class="btn btn-o" style="padding:6px 14px;font-size:12px" onclick="logout()">Log 
+Out</button> 
+</div> 
+</nav> 
+<div id="toast" class="toast"></div> 
+<!-- HOME --> 
+<div class="page active" id="pg-home"> 
+<div class="hero"> 
+<div class="hbg"></div><div class="hgrid"></div> 
+<div style="max-width:620px;position:relative"> 
+<div class="htag">Live GPS Tracking</div> 
+<h1>Move Goods.<br><em>Faster.</em> Smarter.<br>Anywhere.</h1> 
+<p>SwiftHaul connects businesses to a reliable fleet for road, air and sea freight — with real-time 
+tracking at every step.</p> 
+<div class="hctas"> 
+<button class="btn btn-p" onclick="go('signup')">Get Started Free</button> 
+<button class="btn btn-o" onclick="go('track')">Track Shipment</button> 
+</div> 
+<div class="hstats"> 
+<div><div class="snum">12K+</div><div class="slbl">Deliveries/Month</div></div> 
+<div><div class="snum">98.4%</div><div class="slbl">On-Time Rate</div></div> 
+<div><div class="snum">47</div><div class="slbl">Countries Served</div></div> 
+</div> 
+</div> 
+</div> 
+<div class="sec"> 
+<div class="htag" style="margin-bottom:.9rem">Our Services</div> 
+<div class="stitle">Shipping Solutions for Every Need</div> 
+<div class="ssub">From last-mile delivery to international freight at honest prices.</div> 
+<div class="grid3"> 
+<div class="card"><div class="cicon" 
+style="background:rgba(249,115,22,.15)">           
+</div><h3>Road Freight</h3><p>FTL &amp; LTL 
+across India. GPS-tracked, insured, door-to-door.</p><div class="cprice">₹8 <small>/ km · per 
+tonne</small></div></div> 
+<div class="card"><div class="cicon" 
+style="background:rgba(59,130,246,.15)">    
+</div><h3>Air Cargo</h3><p>Next-day domestic, 2
+5 day international express air freight.</p><div class="cprice">₹180 <small>/ kg 
+domestic</small></div></div> 
+<div class="card"><div class="cicon" 
+style="background:rgba(34,197,94,.15)">             
+</div><h3>Sea Freight</h3><p>FCL &amp; LCL 
+ocean freight for bulk international shipments.</p><div class="cprice">₹2,400 <small>/ CBM · 
+FCL</small></div></div> 
+<div class="card"><div class="cicon" 
+style="background:rgba(168,85,247,.15)">      
+</div><h3>Express Parcel</h3><p>Same-day &amp; 
+next-day parcel delivery for e-commerce &amp; docs.</p><div class="cprice">₹45 <small>/ parcel 
+&lt;5 kg</small></div></div> 
+<div class="card"><div class="cicon" 
+style="background:rgba(236,72,153,.15)"> 
+</div><h3>Cold Chain</h3><p>Reefer logistics for 
+pharma &amp; food. –20°C to +25°C range.</p><div class="cprice">₹22 <small>/ km 
+reefer</small></div></div> 
+<div class="card"><div class="cicon" 
+style="background:rgba(234,179,8,.15)">             
+</div><h3>Warehousing</h3><p>14 distribution 
+centers across India, short &amp; long term.</p><div class="cprice">₹12 <small>/ sq.ft / 
+month</small></div></div> 
+</div> 
+</div> 
+<div style="background:var(--s1);border-radius:20px;margin:0 2rem;padding:3rem 2.5rem"> 
+<div class="stitle">How It Works</div> 
+<div class="ssub">Shipping with SwiftHaul takes under 3 minutes to set up.</div> 
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.8rem"> 
+<div style="text-align:center"><div style="width:50px;height:50px;border
+radius:12px;background:rgba(249,115,22,.12);border:1px solid 
+rgba(249,115,22,.25);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 
+auto .9rem">         
+</div><h4 style="font-family:var(--fh);font-weight:700;margin-bottom:6px">1. 
+Book Online</h4><p style="color:var(--mu);font-size:13px">Enter details, get instant 
+quote.</p></div> 
+<div style="text-align:center"><div style="width:50px;height:50px;border
+radius:12px;background:rgba(59,130,246,.12);border:1px solid 
+rgba(59,130,246,.25);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 
+auto .9rem">       
+</div><h4 style="font-family:var(--fh);font-weight:700;margin-bottom:6px">2. We 
+Pick Up</h4><p style="color:var(--mu);font-size:13px">Driver arrives in your window.</p></div> 
+<div style="text-align:center"><div style="width:50px;height:50px;border
+radius:12px;background:rgba(168,85,247,.12);border:1px solid 
+rgba(168,85,247,.25);display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 
+auto .9rem">   
+</div><h4 style="font-family:var(--fh);font-weight:700;margin-bottom:6px">3. 
+Track Live</h4><p style="color:var(--mu);font-size:13px">Real-time GPS from pickup to 
+drop.</p></div> 
+<div style="text-align:center"><div style="width:50px;height:50px;border
+radius:12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);display:flex;align
+items:center;justify-content:center;font-size:22px;margin:0 auto .9rem">  
+</div><h4 style="font
+family:var(--fh);font-weight:700;margin-bottom:6px">4. Delivered</h4><p style="color:var(-
+mu);font-size:13px">Proof of delivery sent instantly.</p></div> 
+</div> 
+</div> 
+<div style="height:3rem"></div> 
+</div> 
+<!-- TRACK --> 
+<div class="page" id="pg-track"> 
+<div style="max-width:860px;margin:0 auto;padding:2.5rem 2rem"> 
+<div class="stitle">Track Your Shipment</div> 
+<p style="color:var(--mu);margin-bottom:1.8rem;font-size:14px">Enter your tracking ID for real
+time location and status updates.</p> 
+<div class="fbox"> 
+<div style="display:flex;gap:10px;flex-wrap:wrap"> 
+<div style="flex:1;min-width:200px"><label>Tracking ID</label><input id="tid" 
+placeholder="e.g. SH-48291" oninput="this.value=this.value.toUpperCase()"></div> 
+<div style="display:flex;align-items:flex-end"><button class="btn btn-p" onclick="doTrack()" 
+style="height:40px">Track Now</button></div> 
+</div> 
+<p style="font-size:12px;color:var(--mu);margin-top:9px">Try: <a onclick="quickTrack('SH
+48291')" style="color:var(--ac);cursor:pointer">SH-48291</a> · <a onclick="quickTrack('SH
+77312')" style="color:var(--ac);cursor:pointer">SH-77312</a> · <a onclick="quickTrack('SH
+10045')" style="color:var(--ac);cursor:pointer">SH-10045</a></p> 
+</div> 
+<div id="track-res" style="display:none"> 
+<div class="fbox"> 
+<div style="display:flex;justify-content:space-between;align-items:flex-start;flex
+wrap:wrap;gap:.8rem;margin-bottom:1.2rem"> 
+<div><p style="font-size:12px;color:var(--mu);margin-bottom:3px">TRACKING ID</p><h3 
+id="tr-id" style="font-family:var(--fh);font-size:1.3rem;font-weight:700"></h3></div> 
+<div id="tr-badge"></div> 
+</div> 
+<div class="row2" style="margin-bottom:1.2rem"> 
+<div><p style="font-size:11px;color:var(--mu);margin-bottom:3px">FROM</p><p id="tr
+from" style="font-weight:500"></p></div> 
+<div><p style="font-size:11px;color:var(--mu);margin-bottom:3px">TO</p><p id="tr-to" 
+style="font-weight:500"></p></div> 
+<div><p style="font-size:11px;color:var(--mu);margin-bottom:3px">DRIVER 
+CONTACT</p><p id="tr-ph" style="font-weight:500;color:var(--ac)"></p></div> 
+<div><p style="font-size:11px;color:var(--mu);margin-bottom:3px">VEHICLE</p><p id="tr
+veh" style="font-weight:500"></p></div> 
+</div> 
+<p style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter
+spacing:.06em;margin-bottom:6px">Live Location</p> 
+<div class="mapbox"> 
+<div class="mgrid"></div> 
+<div class="road-h" style="top:35%"></div><div class="road-h" style="top:62%"></div> 
+<div class="road-v" style="left:24%"></div><div class="road-v" style="left:58%"></div><div 
+class="road-v" style="left:80%"></div> 
+<svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 800 300" 
+preserveAspectRatio="none"> 
+<path d="M 56 105 Q 200 95 400 105 Q 560 112 744 105" stroke="#f97316" stroke
+width="2" stroke-dasharray="8 4" fill="none" opacity=".7"/> 
+</svg> 
+<div style="position:absolute;left:5%;top:27%;width:13px;height:13px;border
+radius:50%;background:var(--bl);border:3px solid #fff;z-index:5"></div> 
+<div class="mlbl" id="ml-from" style="left:3%;top:17%;font-size:9px">From</div> 
+<div class="ddot" style="right:6%;top:27%"></div> 
+<div class="mlbl" id="ml-to" style="right:2%;top:17%;font-size:9px">To</div> 
+<div class="tdot" id="tdot" style="left:20%;top:25%"></div> 
+<div class="mlbl" id="tlbl" style="left:22%;top:14%;font-size:9px;color:var(--ac)">            
+Transit</div> 
+</div> 
+<div class="tinfo"> 
+In 
+<div class="tstat"><div class="tsv" id="tr-spd">—</div><div class="tsl">Speed</div></div> 
+<div class="tstat"><div class="tsv" id="tr-eta">—</div><div class="tsl">ETA</div></div> 
+<div class="tstat"><div class="tsv" id="tr-dist">—</div><div class="tsl">Distance 
+Left</div></div> 
+<div class="tstat"><div class="tsv" id="tr-tmp">—</div><div class="tsl">Cargo 
+Temp</div></div> 
+</div> 
+<p style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter
+spacing:.06em;margin-top:1.3rem;margin-bottom:10px">Timeline</p> 
+<div id="milestones"></div> 
+</div> 
+</div> 
+</div> 
+</div> 
+<!-- RATES --> 
+<div class="page" id="pg-rates"> 
+<div class="sec"> 
+<div class="stitle">Shipping Rates</div> 
+<div class="ssub">Transparent pricing — no hidden fees. Basic insurance up to ₹50,000 
+included.</div> 
+<div class="fbox" style="margin-bottom:2rem"> 
+<h3 style="font-family:var(--fh);font-weight:700;margin-bottom:1.1rem">Rate Calculator</h3> 
+<div style="display:grid;grid-template-columns:repeat(auto
+fit,minmax(160px,1fr));gap:.9rem;margin-bottom:.9rem"> 
+<div class="fg" style="margin:0"><label>Service</label><select id="c-type" 
+onchange="calcRate()"><option value="road">Road Freight</option><option value="air">Air 
+Cargo</option><option value="sea">Sea Freight</option><option value="expr">Express 
+Parcel</option><option value="cold">Cold Chain</option></select></div> 
+<div class="fg" style="margin:0"><label>Weight (kg)</label><input type="number" id="c-wt" 
+value="100" min="1" oninput="calcRate()"></div> 
+<div class="fg" style="margin:0"><label>Distance (km)</label><input type="number" id="c
+km" value="500" min="1" oninput="calcRate()"></div> 
+<div style="display:flex;align-items:flex-end"><div 
+style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border
+radius:9px;padding:9px 14px;width:100%"><div style="font-size:11px;color:var(--mu)">Estimated 
+Cost</div><div id="c-res" style="font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(-
+ac)">₹4,000</div></div></div> 
+</div> 
+<p style="font-size:11px;color:var(--mu)">* Estimates only. Final quote may vary by cargo type 
+and route.</p> 
+</div> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:14px;overflow:hidden;margin-bottom:1.8rem"> 
+<table class="rtbl"> 
+<thead><tr><th>Service</th><th>Rate</th><th>Unit</th><th>Min. 
+Charge</th><th>Transit</th></tr></thead> 
+<tbody> 
+<tr><td>            
+Road FTL</td><td style="color:var(--ac);font-weight:600">₹8</td><td>per 
+km/tonne</td><td>₹2,000</td><td>1–5 days</td></tr> 
+<tr><td>            
+Road LTL</td><td style="color:var(--ac);font-weight:600">₹14</td><td>per 
+km/tonne</td><td>₹800</td><td>2–7 days</td></tr> 
+<tr><td>     
+Air Domestic</td><td style="color:var(--ac);font-weight:600">₹180</td><td>per 
+kg</td><td>₹500</td><td>Next Day</td></tr> 
+<tr><td>     
+Air International</td><td style="color:var(--ac);font
+weight:600">₹420</td><td>per kg</td><td>₹2,500</td><td>2–5 days</td></tr> 
+<tr><td>              
+Sea FCL</td><td style="color:var(--ac);font-weight:600">₹2,400</td><td>per 
+CBM</td><td>₹15,000</td><td>7–30 days</td></tr> 
+<tr><td>              
+Sea LCL</td><td style="color:var(--ac);font-weight:600">₹3,800</td><td>per 
+CBM</td><td>₹4,000</td><td>10–35 days</td></tr> 
+<tr><td>       
+Parcel &lt;5 kg</td><td style="color:var(--ac);font-weight:600">₹45</td><td>per 
+parcel</td><td>₹45</td><td>Same/Next Day</td></tr> 
+<tr><td>  
+Cold Chain</td><td style="color:var(--ac);font-weight:600">₹22</td><td>per 
+km</td><td>₹3,500</td><td>1–4 days</td></tr> 
+<tr><td>              
+Warehousing</td><td style="color:var(--ac);font-weight:600">₹12</td><td>per 
+sq.ft/mo</td><td>₹5,000</td><td>—</td></tr> 
+</tbody> 
+</table> 
+</div> 
+<div style="background:var(--s2);border:1px solid var(--br);border
+radius:14px;padding:1.8rem;display:flex;justify-content:space-between;align-items:center;flex
+wrap:wrap;gap:1rem"> 
+<div><h3 style="font-family:var(--fh);font-weight:700;margin-bottom:3px">Need a Custom 
+Quote?</h3><p style="color:var(--mu);font-size:13px">Large volumes, regular routes, or special 
+cargo — we negotiate contracts.</p></div> 
+<button class="btn btn-p" onclick="go('contact')">Talk to Sales →</button> 
+</div> 
+</div> 
+</div> 
+<!-- ABOUT --> 
+<div class="page" id="pg-about"> 
+<div class="sec"> 
+<div class="htag" style="margin-bottom:.9rem">Our Story</div> 
+<h1 style="font-family:var(--fh);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line
+height:1.15;margin-bottom:1rem">Built by Logistics People,<br>for Logistics People</h1> 
+<p style="color:var(--mu);font-size:16px;max-width:600px;margin-bottom:2.5rem">Founded in 
+2015 by supply-chain veterans frustrated by opaque pricing and zero visibility. We built the platform 
+we always wished existed.</p> 
+<div style="display:grid;grid-template-columns:repeat(auto
+fit,minmax(160px,1fr));gap:1rem;margin-bottom:3.5rem"> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:12px;padding:1.3rem;text-align:center"><div style="font-family:var(--fh);font
+size:2.2rem;font-weight:800;color:var(--ac)">2015</div><p style="color:var(--mu);font
+size:12px">Founded</p></div> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:12px;padding:1.3rem;text-align:center"><div style="font-family:var(--fh);font
+size:2.2rem;font-weight:800;color:var(--ac)">2,400+</div><p style="color:var(--mu);font
+size:12px">Fleet Vehicles</p></div> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:12px;padding:1.3rem;text-align:center"><div style="font-family:var(--fh);font
+size:2.2rem;font-weight:800;color:var(--ac)">14</div><p style="color:var(--mu);font
+size:12px">Warehouses</p></div> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:12px;padding:1.3rem;text-align:center"><div style="font-family:var(--fh);font
+size:2.2rem;font-weight:800;color:var(--ac)">8,500+</div><p style="color:var(--mu);font
+size:12px">Happy Clients</p></div> 
+</div> 
+<h2 style="font-family:var(--fh);font-size:1.6rem;font-weight:700;margin-bottom:1.8rem">Our 
+Journey</h2> 
+<div class="timeline" style="max-width:560px;margin-bottom:3.5rem"> 
+<div class="ti"><div class="tiy">2015</div><h4>Founded in Mumbai</h4><p>Started with 12 
+trucks and a vision for transparent logistics.</p></div> 
+<div class="ti"><div class="tiy">2017</div><h4>Launched GPS Tracking</h4><p>First Indian 
+company to offer real-time tracking to every customer.</p></div> 
+<div class="ti"><div class="tiy">2019</div><h4>Air &amp; Sea Expansion</h4><p>Added 
+multimodal freight with international carrier partnerships.</p></div> 
+<div class="ti"><div class="tiy">2021</div><h4>500K Deliveries Milestone</h4><p>Crossed 
+half a million deliveries with 98.1% on-time rate.</p></div> 
+<div class="ti"><div class="tiy">2023</div><h4>Cold Chain Division</h4><p>Specialized 
+reefer logistics for pharma and food sectors.</p></div> 
+<div class="ti"><div class="tiy">2025</div><h4>EV Fleet Initiative</h4><p>Committed to 30% 
+electric fleet by 2027 as part of net-zero pledge.</p></div> 
+</div> 
+<h2 style="font-family:var(--fh);font-size:1.6rem;font-weight:700;margin
+bottom:1.8rem">Leadership Team</h2> 
+<div class="tgrid"> 
+<div class="tcard"><div class="tav" 
+style="background:rgba(249,115,22,.15)">                       
+</div><h4>Arjun Mehta</h4><p>Co-Founder &amp; 
+CEO</p><p style="margin-top:6px;font-size:12px">Former VP Logistics, Flipkart. IIM 
+Ahmedabad.</p></div> 
+<div class="tcard"><div class="tav" 
+style="background:rgba(59,130,246,.15)">                       
+</div><h4>Priya Sharma</h4><p>Co-Founder &amp; 
+CTO</p><p style="margin-top:6px;font-size:12px">Ex-Google engineer, IIT Bombay.</p></div> 
+<div class="tcard"><div class="tav" 
+style="background:rgba(34,197,94,.15)">                               
+</div><h4>Rahul Nair</h4><p>Chief Operations 
+Officer</p><p style="margin-top:6px;font-size:12px">20 years in supply chain &amp; fleet 
+management.</p></div> 
+<div class="tcard"><div class="tav" 
+style="background:rgba(168,85,247,.15)">                         
+</div><h4>Sunita Kapoor</h4><p>VP Sales &amp; 
+Partnerships</p><p style="margin-top:6px;font-size:12px">Built the enterprise sales team from 0 to 
+120.</p></div> 
+</div> 
+</div> 
+</div> 
+<!-- CONTACT --> 
+<div class="page" id="pg-contact"> 
+<div class="sec"> 
+<div class="stitle">Get In Touch</div> 
+<div class="ssub">Our logistics team is available 24/7. Reach us by phone, email, or this 
+form.</div> 
+<div class="cgrid"> 
+<div> 
+<div class="citem"><div class="cion">  
+</div><div><h4>Phone (24/7)</h4><p>+91 1800
+SWIFTHAUL (Toll Free)</p><p>+91 22 6800 4000 (Intl)</p></div></div> 
+<div class="citem"><div 
+class="cion">       
+</div><div><h4>Email</h4><p>support@swifthaul.in</p><p>enterprise@swiftha
+ul.in</p></div></div> 
+<div class="citem"><div class="cion">      
+</div><div><h4>Head Office</h4><p>Level 12, 
+Bandra Kurla Complex</p><p>Mumbai, Maharashtra 400051</p></div></div> 
+<div class="citem"><div class="cion">       
+</div><div><h4>Hours</h4><p>Mon–Sat: 8 AM – 9 
+PM IST</p><p>Emergency: 24/7</p></div></div> 
+<div style="background:var(--s1);border:1px solid var(--br);border
+radius:12px;padding:1.3rem;margin-top:.5rem"> 
+<h4 style="font-family:var(--fh);font-weight:700;margin-bottom:.9rem">Branch Offices</h4> 
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;font-size:12px"> 
+<div><span style="color:var(--ac)">Delhi NCR</span><br><span style="color:var(-
+mu)">+91 11 4500 8800</span></div> 
+<div><span style="color:var(--ac)">Bangalore</span><br><span style="color:var(-
+mu)">+91 80 4900 2200</span></div> 
+<div><span style="color:var(--ac)">Chennai</span><br><span style="color:var(--mu)">+91 
+44 6700 5500</span></div> 
+<div><span style="color:var(--ac)">Kolkata</span><br><span style="color:var(--mu)">+91 
+33 4600 1100</span></div> 
+</div> 
+</div> 
+</div> 
+<div class="fbox" style="margin:0"> 
+<h3 style="font-family:var(--fh);font-weight:700;margin-bottom:1.3rem">Send a Message</h3> 
+<div id="c-err" class="errmsg"></div><div id="c-ok" class="sucmsg"></div> 
+<div class="fg"><label>Full Name *</label><input id="cn" placeholder="Ramesh 
+Gupta"></div> 
+<div class="fg"><label>Email *</label><input type="email" id="ce" 
+placeholder="ramesh@co.com"></div> 
+<div class="fg"><label>Phone</label><input type="tel" id="cp" placeholder="+91 98765 
+43210"></div> 
+<div class="fg"><label>Subject</label><select id="cs"><option>General 
+Inquiry</option><option>Get a Quote</option><option>Tracking 
+Issue</option><option>Enterprise/Partnership</option><option>Billing</option></select></div> 
+<div class="fg"><label>Message *</label><textarea id="cm" rows="4" placeholder="How can 
+we help?"></textarea></div> 
+<button class="btn btn-p" style="width:100%" onclick="sendMsg()">Send Message 
+→</button> 
+</div> 
+</div> 
+</div> 
+</div> 
+<!-- LOGIN --> 
+<div class="page" id="pg-login"> 
+<div class="awrap"> 
+<div class="acard"> 
+<h2>Welcome back</h2><p class="sub">Log in to your SwiftHaul account</p> 
+<div id="l-err" class="errmsg"></div> 
+<div class="fg"><label>Email</label><input type="email" id="le" 
+placeholder="you@company.com"></div> 
+<div class="fg"><label>Password</label><input type="password" id="lp" placeholder="••••••••" 
+onkeydown="if(event.key==='Enter')doLogin()"></div> 
+<button class="btn btn-p" style="width:100%;padding:10px" onclick="doLogin()">Log 
+In</button> 
+<div class="divider"><span>demo: any email + password "demo123"</span></div> 
+<div class="aswitch">No account? <a onclick="go('signup')">Sign Up</a></div> 
+</div> 
+</div> 
+</div> 
+<!-- SIGNUP --> 
+<div class="page" id="pg-signup"> 
+<div class="awrap"> 
+<div class="acard"> 
+<h2>Create Account</h2><p class="sub">Join 8,500+ businesses on SwiftHaul</p> 
+<div id="s-err" class="errmsg"></div><div id="s-ok" class="sucmsg"></div> 
+<div class="row2"> 
+<div class="fg"><label>First Name</label><input id="sfn" placeholder="Ramesh"></div> 
+<div class="fg"><label>Last Name</label><input id="sln" placeholder="Gupta"></div> 
+</div> 
+<div class="fg"><label>Email *</label><input type="email" id="sem" 
+placeholder="ramesh@co.com"></div> 
+<div class="fg"><label>Phone</label><input type="tel" id="sph" placeholder="+91 98765 
+43210"></div> 
+<div class="fg"><label>Company</label><input id="sco" placeholder="Gupta 
+Enterprises"></div> 
+<div class="fg"><label>Password (min 6)</label><input type="password" id="sp" 
+placeholder="••••••••"></div> 
+<div class="fg"><label>Confirm Password</label><input type="password" id="sp2" 
+placeholder="••••••••"></div> 
+<button class="btn btn-p" style="width:100%;padding:10px" onclick="doSignup()">Create 
+Account →</button> 
+<div class="aswitch">Already have an account? <a onclick="go('login')">Log In</a></div> 
+</div> 
+</div> 
+</div> 
+<!-- DASHBOARD --> 
+<div class="page" id="pg-dash"> 
+<div class="sec"> 
+<div style="display:flex;justify-content:space-between;align-items:center;margin
+bottom:1.8rem;flex-wrap:wrap;gap:.8rem"> 
+<div><h2 style="font-family:var(--fh);font-size:1.7rem;font-weight:700;margin
+bottom:3px">Dashboard</h2><p style="color:var(--mu);font-size:13px" id="dw">Welcome 
+back</p></div> 
+<button class="btn btn-p" style="font-size:13px;padding:7px 16px" onclick="openModal()">+ 
+New Shipment</button> 
+</div> 
+<div class="dgrid"> 
+<div class="dc"><h4>Total</h4><div class="big" id="d-tot">0</div></div> 
+<div class="dc"><h4>In Transit</h4><div class="big" style="color:var(--ac)" id="d
+tr">0</div></div> 
+<div class="dc"><h4>Delivered</h4><div class="big" style="color:var(--gr)" id="d
+dl">0</div></div> 
+<div class="dc"><h4>Total Spent</h4><div class="big" style="color:var(--bl)" id="d
+sp">₹0</div></div> 
+</div> 
+<h3 style="font-family:var(--fh);font-weight:700;margin-bottom:.9rem">Your Shipments</h3> 
+<div class="slist"> 
+<div class="srow 
+hdr"><span>ID</span><span>Route</span><span>Type</span><span>Date</span><span>Status</
+span></div> 
+<div id="srows" style="padding:2rem;text-align:center;color:var(--mu)">No shipments yet. Click 
+"+ New Shipment" to get started!</div> 
+</div> 
+</div> 
+</div> 
+<!-- MODAL --> 
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"> 
+<div class="mbox"> 
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.3rem"> 
+<h3 style="font-family:var(--fh);font-weight:700">New Shipment</h3> 
+<button class="btn btn-o" style="padding:4px 12px;font-size:12px" 
+onclick="closeModal()">✕</button> 
+</div> 
+<div id="m-err" class="errmsg"></div> 
+<div class="fg"><label>From City</label><input id="mf" placeholder="Mumbai"></div> 
+<div class="fg"><label>To City</label><input id="mt" placeholder="Delhi"></div> 
+<div class="fg"><label>Service</label><select id="mty"><option>Road 
+Freight</option><option>Air Cargo</option><option>Sea Freight</option><option>Express 
+Parcel</option><option>Cold Chain</option></select></div> 
+<div class="row2"> 
+<div class="fg"><label>Weight (kg)</label><input type="number" id="mw" placeholder="100" 
+min="1"></div> 
+<div class="fg"><label>Distance (km)</label><input type="number" id="md" placeholder="500" 
+min="1"></div> 
+</div> 
+<div class="fg"><label>Cargo Description</label><input id="mdc" placeholder="Electronics, 10 
+boxes"></div> 
+<button class="btn btn-p" style="width:100%" onclick="addShipment()">Book Shipment 
+→</button> 
+</div> 
+</div> 
+<footer> 
+<div class="fgrid"> 
+<div class="fb"><div class="logo">Swift<span>Haul</span></div><p>India's most transparent 
+logistics platform. Real-time tracking, honest pricing, reliable delivery since 2015.</p></div> 
+<div class="fc"><h5>Services</h5><a onclick="go('rates')">Road Freight</a><a 
+onclick="go('rates')">Air Cargo</a><a onclick="go('rates')">Sea Freight</a><a 
+onclick="go('rates')">Warehousing</a></div> 
+<div class="fc"><h5>Company</h5><a onclick="go('about')">About Us</a><a 
+onclick="go('about')">Our Team</a><a onclick="go('contact')">Careers</a><a 
+onclick="go('contact')">Press</a></div> 
+<div class="fc"><h5>Support</h5><a onclick="go('track')">Track Shipment</a><a 
+onclick="go('contact')">Contact Us</a><a onclick="go('rates')">Get a Quote</a><a 
+onclick="go('login')">My Account</a></div> 
+</div> 
+<div class="fbot"><span>© 2025 SwiftHaul Logistics Pvt. Ltd. All rights 
+reserved.</span><span>CIN: U63000MH2015PTC271234 | GST: 
+27AABCS1429B1ZB</span></div> 
+</footer> 
+<script> 
+const SHIPS={ 
+'SH-48291':{from:'Mumbai',to:'Delhi',status:'In Transit',type:'Road Freight',ph:'+91 98100 
+55421',veh:'MH 04 AB 7732 (Tata 407)',spd:'68 km/h',eta:'11 hrs',dist:'720 km',tmp:'24°C',prog:.45, 
+miles:[{t:'12 Mar 08:30',e:'Picked up from sender',d:true},{t:'12 Mar 14:15',e:'Departed Mumbai 
+Depot',d:true},{t:'12 Mar 22:40',e:'Reached Surat checkpoint',d:true},{t:'13 Mar 06:20',e:'Passing 
+Vadodara',d:true},{t:'13 Mar 18:00 (Est)',e:'Arrive Delhi Hub',d:false},{t:'14 Mar 10:00 (Est)',e:'Out 
+for delivery',d:false}]}, 
+'SH-77312':{from:'Chennai',to:'Bangalore',status:'Delivered',type:'Express Parcel',ph:'+91 94400 
+88321',veh:'TN 09 BX 4401 (Bolero)',spd:'0 km/h',eta:'Delivered',dist:'0 km',tmp:'N/A',prog:1, 
+miles:[{t:'11 Mar 09:00',e:'Picked up',d:true},{t:'11 Mar 11:30',e:'Departed Chennai',d:true},{t:'11 
+Mar 16:45',e:'Arrived Bangalore hub',d:true},{t:'12 Mar 09:20',e:'Out for delivery',d:true},{t:'12 Mar 
+11:08',e:'Delivered ✓',d:true}]}, 
+'SH-10045':{from:'Hyderabad',to:'Kolkata',status:'Pending Pickup',type:'Air Cargo',ph:'+91 90005 
+11282',veh:'IndiGo 6E-8891 Cargo',spd:'—',eta:'2 days',dist:'1,480 km',tmp:'22°C',prog:.04, 
+miles:[{t:'14 Mar 14:00 (Est)',e:'Pickup scheduled',d:false},{t:'14 Mar 19:00 (Est)',e:'Check-in 
+HYD Airport',d:false},{t:'15 Mar 06:00 (Est)',e:'Flight departs',d:false},{t:'15 Mar 08:30 
+(Est)',e:'Arrives Kolkata',d:false},{t:'15 Mar 16:00 (Est)',e:'Out for delivery',d:false}]} 
+}; 
+let user=null,tivl=null; 
+function go(id){ 
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); 
+document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active')); 
+var pg=document.getElementById('pg-'+id); 
+if(pg) pg.classList.add('active'); 
+var nl=document.getElementById('n-'+id); 
+if(nl) nl.classList.add('active'); 
+window.scrollTo(0,0); 
+if(tivl){clearInterval(tivl);tivl=null;} 
+if(id==='dash') loadDash(); 
+} 
+function syncNav(){ 
+var a=document.getElementById('nav-auth'),u=document.getElementById('nav
+user'),nd=document.getElementById('n-dash'); 
+if(user){a.style.display='none';u.style.display='flex';document.getElementById('uname').textContent='
+Hi, '+user.name.split(' ')[0];nd.style.display='inline';} 
+else{a.style.display='flex';u.style.display='none';nd.style.display='none';} 
+} 
+function doLogin(){ 
+var em=gv('le'),pw=gv('lp'),el=document.getElementById('l-err'); 
+el.style.display='none'; 
+if(!em||!pw){showE(el,'Fill in all fields.');return;} 
+if(pw.length<6){showE(el,'Password too short.');return;} 
+var users=JSON.parse(localStorage.getItem('sh_users')||'[]'); 
+var found=users.find(function(u){return u.em===em;}); 
+if(found&&found.pw!==pw&&pw!=='demo123'){showE(el,'Incorrect password.');return;} 
+user={em:em,name:found?found.name:em.split('@')[0],co:found?found.co:'Demo'}; 
+localStorage.setItem('sh_sess',JSON.stringify(user)); 
+syncNav();go('dash');toast('Welcome back, '+user.name.split(' ')[0]+'!          
+} 
+function doSignup(){ 
+var fn=gv('sfn'),ln=gv('sln'),em=gv('sem'),pw=gv('sp'),pw2=gv('sp2'); 
+'); 
+var el=document.getElementById('s-err'),ok=document.getElementById('s-ok'); 
+el.style.display='none';ok.style.display='none'; 
+if(!fn||!ln||!em||!pw){showE(el,'Fill in required fields.');return;} 
+if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showE(el,'Invalid email.');return;} 
+if(pw.length<6){showE(el,'Password must be 6+ chars.');return;} 
+if(pw!==pw2){showE(el,'Passwords do not match.');return;} 
+var users=JSON.parse(localStorage.getItem('sh_users')||'[]'); 
+if(users.find(function(u){return u.em===em;})){showE(el,'Email already registered.');return;} 
+var nu={name:fn+' '+ln,em:em,ph:gv('sph'),co:gv('sco')||'Individual',pw:pw}; 
+users.push(nu);localStorage.setItem('sh_users',JSON.stringify(users)); 
+user={em:em,name:nu.name,co:nu.co}; 
+localStorage.setItem('sh_sess',JSON.stringify(user)); 
+syncNav();go('dash');toast('Account created! Welcome to SwiftHaul            
+} 
+function logout(){ 
+'); 
+user=null;localStorage.removeItem('sh_sess');syncNav();go('home');toast('Logged out.'); 
+} 
+function quickTrack(id){document.getElementById('tid').value=id;doTrack();} 
+function doTrack(){ 
+var id=document.getElementById('tid').value.trim().toUpperCase(); 
+var res=document.getElementById('track-res'); 
+if(!id){toast('Enter a tracking ID.','err');return;} 
+var s=SHIPS[id]; 
+if(!s){toast('ID not found. Try SH-48291, SH-77312, SH
+10045.','err');res.style.display='none';return;} 
+res.style.display='block'; 
+document.getElementById('tr-id').textContent=id; 
+document.getElementById('tr-from').textContent=s.from; 
+document.getElementById('tr-to').textContent=s.to; 
+document.getElementById('tr-ph').textContent=s.ph; 
+document.getElementById('tr-veh').textContent=s.veh; 
+document.getElementById('tr-spd').textContent=s.spd; 
+document.getElementById('tr-eta').textContent=s.eta; 
+document.getElementById('tr-dist').textContent=s.dist; 
+document.getElementById('tr-tmp').textContent=s.tmp; 
+document.getElementById('ml-from').textContent=s.from; 
+document.getElementById('ml-to').textContent=s.to; 
+var cls=s.status==='Delivered'?'bg':s.status==='In Transit'?'bo':'bb'; 
+document.getElementById('tr-badge').innerHTML='<span class="badge 
+'+cls+'">'+s.status+'</span>'; 
+document.getElementById('milestones').innerHTML=s.miles.map(function(m){ 
+return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px"><div 
+style="width:18px;height:18px;border-radius:50%;flex-shrink:0;margin
+top:2px;background:'+(m.d?'var(--gr)':'var(--s2)')+';border:2px solid '+(m.d?'var(--gr)':'var(-
+br)')+';display:flex;align-items:center;justify-content:center;font
+size:9px">'+(m.d?'✓':'')+'</div><div><div style="font-size:13px;font
+weight:500;'+(m.d?'':'color:var(--mu)')+'">'+m.e+'</div><div style="font-size:11px;color:var(-
+mu)">'+m.t+'</div></div></div>'; 
+}).join(''); 
+animTruck(s.prog,s.status); 
+res.scrollIntoView({behavior:'smooth',block:'start'}); 
+} 
+function animTruck(prog,status){ 
+if(tivl){clearInterval(tivl);tivl=null;} 
+var td=document.getElementById('tdot'),tl=document.getElementById('tlbl'); 
+if(!td) return; 
+var sl=8,el=80,p=Math.min(Math.max(prog,0),1); 
+function setPos(){td.style.left=(sl+p*(el-sl))+'%';tl.style.left=(sl+p*(el-sl)+2)+'%';} 
+setPos(); 
+if(status==='Delivered'){td.style.background='var(--gr)';tl.textContent='   
+Delivered';tl.style.color='var(--gr)';return;} 
+if(status==='Pending Pickup'){td.style.background='var(--bl)';tl.textContent='       
+Pickup';tl.style.color='var(--bl)';return;} 
+td.style.background='var(--ac)';tl.textContent='            
+Awaiting 
+In Transit';tl.style.color='var(--ac)'; 
+tivl=setInterval(function(){p=Math.min(p+.0015,.97);setPos();td.style.top=(25+(Math.random()
+.5))+'%';},600); 
+} 
+function calcRate(){ 
+var tp=document.getElementById('c-type').value; 
+var wt=parseFloat(document.getElementById('c-wt').value)||0; 
+var km=parseFloat(document.getElementById('c-km').value)||0; 
+var cost=0; 
+if(tp==='road') cost=Math.max(8*km*(wt/1000),2000); 
+else if(tp==='air') cost=Math.max(180*wt,500); 
+else if(tp==='sea') cost=Math.max(2400*(wt/1000),15000); 
+else if(tp==='expr') cost=wt<=5?45:Math.max(9*wt,200); 
+else if(tp==='cold') cost=Math.max(22*km,3500); 
+document.getElementById('c-res').textContent='₹'+Math.round(cost).toLocaleString('en-IN'); 
+} 
+function sendMsg(){ 
+var nm=gv('cn'),em=gv('ce'),ms=gv('cm'); 
+var el=document.getElementById('c-err'),ok=document.getElementById('c-ok'); 
+el.style.display='none';ok.style.display='none'; 
+if(!nm||!em||!ms){showE(el,'Fill in all required fields.');return;} 
+if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showE(el,'Invalid email address.');return;} 
+ok.textContent="Message sent! We'll respond within 24 hours.";ok.style.display='block'; 
+['cn','ce','cp','cm'].forEach(function(id){document.getElementById(id).value='';}); 
+toast('Message sent!         
+} 
+function loadDash(){ 
+'); 
+if(!user){go('login');return;} 
+document.getElementById('dw').textContent='Welcome back, '+user.name+' · '+user.co; 
+var ships=getShips(); 
+var tr=ships.filter(function(s){return s.st==='In Transit';}).length; 
+var dl=ships.filter(function(s){return s.st==='Delivered';}).length; 
+var sp=ships.reduce(function(a,s){return a+(s.cost||0);},0); 
+document.getElementById('d-tot').textContent=ships.length; 
+document.getElementById('d-tr').textContent=tr; 
+document.getElementById('d-dl').textContent=dl; 
+document.getElementById('d-sp').textContent='₹'+sp.toLocaleString('en-IN'); 
+var rows=document.getElementById('srows'); 
+if(!ships.length){rows.innerHTML='<div style="padding:2rem;text-align:center;color:var(-
+mu)">No shipments yet. Click "+ New Shipment" to book one!</div>';return;} 
+rows.innerHTML=ships.map(function(s){ 
+var cls=s.st==='Delivered'?'bg':s.st==='In Transit'?'bo':'bb'; 
+return '<div class="srow"><span style="font-family:var(--fh);color:var(--ac);font
+size:12px">'+s.id+'</span><span>'+s.from+' → '+s.to+'</span><span style="color:var(-
+mu)">'+s.type+'</span><span style="color:var(--mu)">'+s.dt+'</span><span><span class="badge 
+'+cls+'">'+s.st+'</span></span></div>'; 
+}).join(''); 
+} 
+function getShips(){return JSON.parse(localStorage.getItem('sh_s_'+(user?user.em:''))||'[]');} 
+function 
+openModal(){if(!user){go('login');return;}document.getElementById('modal').classList.add('open');} 
+function closeModal(){document.getElementById('modal').classList.remove('open');} 
+function addShipment(){ 
+var fr=gv('mf'),to=gv('mt'),ty=document.getElementById('mty').value; 
+var wt=parseFloat(document.getElementById('mw').value)||0; 
+var km=parseFloat(document.getElementById('md').value)||0; 
+var el=document.getElementById('m-err'); 
+el.style.display='none'; 
+if(!fr||!to||!wt||!km){showE(el,'Fill in all fields.');return;} 
+var ships=getShips(); 
+var id='SH-'+(Math.floor(Math.random()*90000)+10000); 
+var cost=Math.round(km*wt*0.12+500); 
+var now=new Date(); 
+var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; 
+var dt=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear(); 
+ships.unshift({id:id,from:fr,to:to,type:ty,wt:wt,km:km,cost:cost,dt:dt,st:'Pending Pickup'}); 
+localStorage.setItem('sh_s_'+user.em,JSON.stringify(ships)); 
+closeModal();loadDash(); 
+['mf','mt','mw','md','mdc'].forEach(function(i){document.getElementById(i).value='';}); 
+toast('Shipment '+id+' booked!            
+} 
+'); 
+function gv(id){return document.getElementById(id).value.trim();} 
+function showE(el,msg){el.textContent=msg;el.style.display='block';} 
+var ttmr; 
+function toast(msg,type){ 
+var t=document.getElementById('toast'); 
+t.textContent=msg;t.className='toast show'+(type==='err'?' error':''); 
+clearTimeout(ttmr);ttmr=setTimeout(function(){t.classList.remove('show');},3200); 
+} 
+try{var s=localStorage.getItem('sh_sess');if(s){user=JSON.parse(s);syncNav();}}catch(e){} 
+calcRate(); 
+</script> 
+</body> 
+</html>
